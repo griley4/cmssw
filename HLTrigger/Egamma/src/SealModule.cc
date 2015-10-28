@@ -2,7 +2,11 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 
 // To be used in the future for any cut
-#include "HLTrigger/Egamma/interface/HLTEgammaGenericFilter.h"
+#include "DataFormats/RecoCandidate/interface/RecoEcalCandidate.h"
+#include "DataFormats/RecoCandidate/interface/RecoEcalCandidateFwd.h"
+#include "DataFormats/EgammaCandidates/interface/Electron.h"
+#include "DataFormats/EgammaCandidates/interface/ElectronFwd.h"
+
 #include "HLTrigger/Egamma/interface/HLTEgammaGenericQuadraticFilter.h"
 #include "HLTrigger/Egamma/interface/HLTEgammaGenericQuadraticEtaFilter.h"
 #include "HLTrigger/Egamma/interface/HLTElectronGenericFilter.h"
@@ -10,7 +14,6 @@
 #include "HLTrigger/Egamma/interface/HLTEgammaEtFilter.h"
 #include "HLTrigger/Egamma/interface/HLTEgammaDoubleEtFilter.h"
 #include "HLTrigger/Egamma/interface/HLTElectronPixelMatchFilter.h"
-#include "HLTrigger/Egamma/interface/HLTElectronPFMTFilter.h"
 #include "HLTrigger/Egamma/interface/HLTPMMassFilter.h"
 #include "HLTrigger/Egamma/interface/HLTElectronMuonInvMassFilter.h"
 #include "HLTrigger/Egamma/interface/HLTPMDocaFilter.h"
@@ -32,16 +35,25 @@
 #include "HLTrigger/Egamma/interface/HLTEgammaAllCombMassFilter.h"
 
 #include "HLTrigger/Egamma/interface/HLTDisplacedEgammaFilter.h"
-
 #include "HLTrigger/Egamma/interface/HLTElectronMissingHitsFilter.h"
 
-DEFINE_FWK_MODULE(HLTEgammaGenericFilter);
+#include "HLTrigger/Egamma/interface/HLTEPFMTFilter.h"
+#include "HLTrigger/Egamma/src/HLTEPFMTFilter.cc"
+
 DEFINE_FWK_MODULE(HLTEgammaGenericQuadraticFilter);
 DEFINE_FWK_MODULE(HLTEgammaGenericQuadraticEtaFilter);
 DEFINE_FWK_MODULE(HLTEgammaEtFilter);
 DEFINE_FWK_MODULE(HLTEgammaDoubleEtFilter);
 DEFINE_FWK_MODULE(HLTElectronPixelMatchFilter);
+
+typedef HLTEPFMTFilter<reco::Electron> HLTGsfElectronPFMTFilter;
+DEFINE_FWK_MODULE(HLTGsfElectronPFMTFilter);
+typedef HLTEPFMTFilter<reco::RecoEcalCandidate> HLTEcalCandidatePFMTFilter;
+DEFINE_FWK_MODULE(HLTEcalCandidatePFMTFilter);
+// backward compatibility
+typedef HLTGsfElectronPFMTFilter HLTElectronPFMTFilter;
 DEFINE_FWK_MODULE(HLTElectronPFMTFilter);
+
 DEFINE_FWK_MODULE(HLTPMMassFilter);
 DEFINE_FWK_MODULE(HLTElectronMuonInvMassFilter);
 DEFINE_FWK_MODULE(HLTPMDocaFilter);

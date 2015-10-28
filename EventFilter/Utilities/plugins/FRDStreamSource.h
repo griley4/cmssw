@@ -28,7 +28,7 @@ public:
 
 private:
   // member functions
-  virtual bool setRunAndEventInfo(edm::EventID& id, edm::TimeValue_t& theTime);
+  virtual bool setRunAndEventInfo(edm::EventID& id, edm::TimeValue_t& theTime, edm::EventAuxiliary::ExperimentType& eType);
   virtual void produce(edm::Event& e);
 
   void beginRun(edm::Run&) {}
@@ -46,6 +46,7 @@ private:
   std::auto_ptr<FEDRawDataCollection> rawData_;
   std::vector<char> buffer_;
   const bool verifyAdler32_;
+  const bool useL1EventID_;
   unsigned int detectedFRDversion_=0;
 };
 

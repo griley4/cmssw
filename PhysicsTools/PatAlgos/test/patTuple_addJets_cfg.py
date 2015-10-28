@@ -9,7 +9,7 @@ process.load("PhysicsTools.PatAlgos.selectionLayer1.selectedPatCandidates_cff")
 
 from PhysicsTools.PatAlgos.tools.metTools import addMETCollection
 #addMETCollection(process, labelName='patMETCalo', metSource='met')
-addMETCollection(process, labelName='patMETPF', metSource='pfType1CorrectedMet')
+addMETCollection(process, labelName='patMETPF', metSource='pfMetT1')
 #addMETCollection(process, labelName='patMETTC', metSource='tcMet') # FIXME: removed from RECO/AOD; needs functionality to add to processing
 
 ## uncomment the following line to add different jet collections
@@ -25,7 +25,7 @@ addJetCollection(
    postfix   = postfixAK4PFCHS,
    labelName = labelAK4PFCHS,
    jetSource = cms.InputTag('ak4PFJetsCHS'),
-   jetCorrections = ('AK5PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'Type-2') # FIXME: Use proper JECs, as soon as available
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'Type-2') # FIXME: Use proper JECs, as soon as available
    )
 process.out.outputCommands.append( 'drop *_selectedPatJets%s%s_caloTowers_*'%( labelAK4PFCHS, postfixAK4PFCHS ) )
 
@@ -35,7 +35,7 @@ addJetCollection(
    process,
    labelName = labelAK4PF,
    jetSource = cms.InputTag('ak4PFJets'),
-   jetCorrections = ('AK5PF', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'Type-1'), # FIXME: Use proper JECs, as soon as available
+   jetCorrections = ('AK4PF', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'Type-1'), # FIXME: Use proper JECs, as soon as available
    btagDiscriminators = [
        'jetBProbabilityBJetTags'
      , 'jetProbabilityBJetTags'
@@ -57,8 +57,8 @@ addJetCollection(
    algo = 'CA8',
    rParam = 0.8,
    #genJetCollection = cms.InputTag('ak8GenJets'), # not in used SIM yet
-   genJetCollection = cms.InputTag('ak5GenJets'),
-   jetCorrections = ('AK5PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'), # FIXME: Use proper JECs, as soon as available
+   genJetCollection = cms.InputTag('ak4GenJets'),
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'), # FIXME: Use proper JECs, as soon as available
    btagDiscriminators = [
        'combinedSecondaryVertexBJetTags'
      ],
@@ -68,7 +68,7 @@ process.out.outputCommands.append( 'drop *_selectedPatJets%s_caloTowers_*'%( lab
 # uncomment the following lines to switch to ak4CaloJets in your PAT output
 switchJetCollection(
    process,
-   jetSource = cms.InputTag('ak4CaloJets'),
+   jetSource = cms.InputTag('ak5CaloJets'),
    jetCorrections = ('AK5Calo', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'Type-1'), # FIXME: Use proper JECs, as soon as available
    btagDiscriminators = [
        'jetBProbabilityBJetTags'

@@ -29,7 +29,7 @@ namespace fwlite {
 public:
       MultiProductGetter(MultiChainEvent const* iEvent) : event_(iEvent) {}
 
-      virtual edm::WrapperHolder
+      virtual edm::WrapperBase const*
       getIt(edm::ProductID const& iID) const override {
         return event_->getByProductID(iID);
       }
@@ -359,33 +359,14 @@ MultiChainEvent::getByLabel(
   return true;
 }
 
-bool
-MultiChainEvent::getByLabel(
-                       std::type_info const& iType,
-                       char const* iModule,
-                       char const* iInstance,
-                       char const* iProcess,
-                       edm::WrapperHolder& holder) const {
-  bool ret1 = event1_->getByLabel(iType, iModule, iInstance, iProcess, holder);
-  if(!ret1) {
-    (const_cast<MultiChainEvent*>(this))->toSec(event1_->id());
-    bool ret2 = event2_->getByLabel(iType, iModule, iInstance, iProcess, holder);
-    if(!ret2) return false;
-  }
-  return true;
-}
-
-edm::WrapperHolder MultiChainEvent::getByProductID(edm::ProductID const&iID) const
+edm::WrapperBase const* MultiChainEvent::getByProductID(edm::ProductID const&iID) const
 {
   // First try the first file
-  edm::WrapperHolder edp = event1_->getByProductID(iID);
+  edm::WrapperBase const* edp = event1_->getByProductID(iID);
   // Did not find the product, try secondary file
-  if (!edp.isValid()) {
+  if (edp == nullptr) {
     (const_cast<MultiChainEvent*>(this))->toSec(event1_->id());
     edp = event2_->getByProductID(iID);
-    if (!edp.isValid()) {
-      throw cms::Exception("ProductNotFound") << "Cannot find product " << iID;
-    }
   }
   return edp;
 }
