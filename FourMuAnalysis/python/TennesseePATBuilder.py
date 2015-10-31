@@ -1,5 +1,4 @@
 #Grant Riley October 27 2015
-#blah blah blah
 
 ## import skeleton process
 from PhysicsTools.PatAlgos.patTemplate_cfg import *
@@ -40,27 +39,26 @@ process.TrigSkim = cms.Path(process.triggerSelection)
 #make J/Psi cands from muons
 ##Add Muon candidates
 from PhysicsTools.PatAlgos.tools.muonTools import *
-process.goodMuons = cms.EDFilter("MuonSelector",
+process.goodMuons = cms.EDFilter("PATMuonSelector",
                 src = cms.InputTag("patMuons"),
-                cut = cms.string(""),
+#                cut = cms.string(''),
+                cut = cms.string("track.isNonnull && track.hitPattern.pixelLayersWithMeasurement > 0 ")
+
                 )
 process.makeGoodMuons = cms.Path(process.goodMuons)
 process.UpsCand = cms.EDProducer("CandViewShallowCloneCombiner",
                 decay = cms.string('goodMuons@+ goodMuons@-'),
-                cut = cms.string(''),
-                name = cms.string('Upsilon_Candidate_Grant')
+                cut = cms.string('mass>=9.1 && mass<=9.75'),
                 )
 process.makeUpsCand = cms.Path(process.UpsCand)
 process.DiMuCand = cms.EDProducer("CandViewShallowCloneCombiner",
                 decay = cms.string('goodMuons@+ goodMuons@-'),
-                cut = cms.string(''),
-                name = cms.string('Dimuon_Candidate_Grant')
+                cut = cms.string('mass<9.1'),
                 )
 process.makeDiMuCand = cms.Path(process.DiMuCand)
 process.FourMuCand= cms.EDProducer("CandViewShallowCloneCombiner",
                 decay = cms.string('UpsCand DiMuCand'),
                 cut = cms.string(''),
-                name = cms.string('Fourmuon_Candidate_Grant')
                 )
 process.makeFourMuCand = cms.Path(process.FourMuCand)
 ## let it run
@@ -72,9 +70,9 @@ process.pat = cms.Path(
 
 process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string('patUTTuple.root'),
 ## save only events passing the full path
-                SelectEvents = cms.untracked.PSet( SelectEvents = cms.vstring('TrigSkim') ),
+                SelectEvents = cms.untracked.PSet( SelectEvents = cms.vstring("TrigSkim") ),
                 ## save PAT output; you need a '*' to unpack the list of commands
-#                outputCommands = cms.untracked.vstring('drop *', 'keep *reco*', 'keep *pat*', 'keep *hlt*)
+#                outputCommands = cms.untracked.vstring('drop *', 'keep *reco*', 'keep *pat*', 'keep *hlt*')
 
 
                 )
